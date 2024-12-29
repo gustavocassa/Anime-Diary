@@ -26,7 +26,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
+            background-color: rgb(28,45,66);
             color: var(--text-color);
             transition: margin-left var(--transition-speed) ease;
             min-height: 100vh;
@@ -115,13 +115,13 @@
         }
 
         .anime-card {
-            background-color: var(--card-background);
+            background-color: rgba(24,26,27);
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: 0 4px 6px var(--shadow-color);
             transition: transform var(--transition-speed);
+        
         }
-
         .anime-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5); /* Sombra difusa */
@@ -132,7 +132,6 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
         }
 
@@ -201,7 +200,7 @@
 }
 
 .stat-card {
-    background-color: #444; /* Color de fondo de las tarjetas */
+    background-color: #1a1a1a; /* Color de fondo de las tarjetas */
     margin: 10px 0; /* Margen entre tarjetas */
     padding: 10px; /* Espaciado interno */
     border-radius: 5px; /* Bordes redondeados */
@@ -290,7 +289,7 @@
 
         <div class="search-container">
             <input 
-                type="text" id="sidebarSearch" class="search-input" placeholder="Buscar anime..." style="margin-left:-10px;">
+                type="text" id="sidebarSearch" class="search-input" placeholder="Buscar anime..." style="margin-left:-10px; background-color: rgb(18,18,18);">
         </div>
 
         <div class="stats-container">
@@ -323,7 +322,7 @@
             <button class="menu-button" id="openSidebar">
                 <i class="fas fa-bars"></i>
             </button>
-            <h1>Anime Diary</h1>
+            <h1 style="color:rgba(201,201,200);">Anime Diary</h1>
         </div>
 
         <div class="controls">
@@ -333,6 +332,7 @@
                     id="mainSearch" 
                     class="search-input" 
                     placeholder="Buscar anime..."
+                    style="background-color: rgb(18,18,18);"
                 >
             </div>
 
@@ -907,8 +907,8 @@ function createAnimeCard(anime) {
     card.innerHTML = `
         <img src="${anime.image}" alt="${anime.title}" loading="lazy" class="anime-image">
         <div class="anime-info">
-            <h2 class="anime-title">${anime.title}</h2>
-            <p class="anime-category">${anime.category}</p>
+            <h2 class="anime-title" style="color: rgb(163, 159, 154);">${anime.title}</h2>
+            <p class="anime-category" style="color: rgba(168,160,149);">${anime.category}</p>
             <p class="anime-score">${anime.score}</p>
         </div>
     `;
