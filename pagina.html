@@ -1024,7 +1024,7 @@ function updateStats() {
         completed: animes.filter(anime => anime.status.includes('Completados')).length,
         watching: animes.filter(anime => anime.status.includes('Viendo Actualmente')).length,
         abandoned: animes.filter(anime => anime.status.includes('Abandonados')).length,
-        holding: animes.filter(anime => anime.status.includes('Manteniendo')).length
+        holding: animes.filter(anime => anime.status.includes('En espera')).length
     };
 
     Object.entries(stats).forEach(([key, value]) => {
