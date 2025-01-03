@@ -323,6 +323,12 @@ header {
     margin-top: 20px; /* Espacio superior opcional */
     font-size: 1.5em; /* Tamaño de fuente opcional */
 }
+@media (max-width: 768px) {
+    .search-container {
+        margin-left: 20px; /* Margen a la izquierda */
+        margin-top: 20px;  /* Margen superior */
+    }
+}
 
     </style>
 </head>
@@ -335,7 +341,7 @@ header {
 
         <div class="search-container">
             <input 
-                type="text" id="sidebarSearch" class="search-input" placeholder="Buscar anime..." style="margin-left:-10px; background-color: rgb(18,18,18); max-width:300px;">
+                type="text" id="sidebarSearch" class="search-input" placeholder="Buscar anime..." style="margin-left:-10px; background-color: rgb(18,18,18); max-width: 290px;">
         </div>
 
         <div class="stats-container">
