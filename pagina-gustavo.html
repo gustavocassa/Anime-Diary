@@ -309,6 +309,28 @@ header {
         width:225px;
             }
 
+            select.filter-button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+    font-weight: 500;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+select.filter-button:hover {
+    background-color: var(--primary-hover);
+}
+
 @media (max-width: 768px) {
     #sidebarSearch {
         margin-left: 12.5px; 
@@ -356,7 +378,7 @@ header {
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-number" id="totalCount">0</div>
-                <div>Total de Animes</div>
+                <div>Todos</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="completedCount">0</div>
@@ -388,7 +410,7 @@ header {
                     <img src="https://i.ibb.co/L8s0GCz/logo-2.png" alt="Descripción del logo" style="width: 50px; height: 50px;">
                 </a>
             
-                <h1 style="color:rgb(5, 5, 5); margin-bottom: 5px;">Anime Diary</h1>
+                <h1 style="color:rgb(5, 5, 5); margin-bottom: 5px;">Anime Diary</h1><h2 style="font-size: small; padding-left: 400px;">- Agregar Número de Series y Películas Vistas en menu lateral <br> - Quitar el modal del telefono</h2>
             </div>
         </header>
         
@@ -403,7 +425,7 @@ header {
                 >
             </div>
 
-             <div class="filter-buttons">
+            <div class="filter-buttons">
                 <button class="filter-button" onclick="filterByStatus('Todos los Animes')">
                     Todos
                 </button>
@@ -420,15 +442,21 @@ header {
                     En Espera
                 </button>
                 <select id="sortOptions" class="filter-button">
-                    <option value="default">Orden Predeterminado</option> <!-- Nueva opción añadida -->
+                    <option value="default">Orden Predeterminado</option>
                     <option value="az">Ordenar A-Z</option>
                     <option value="za">Ordenar Z-A</option>
                     <option value="rating">Ordenar por Calificación</option>
                 </select>
-                
-                
+    
             </div>
-        </div>
+            <select id="contentTypeSelect" class="filter-button">
+                <option value="anime">Animes</option>
+                <option value="Hentai">H🔥</option>
+                <option value="series">Series</option>
+                <option value="movie">Películas</option>
+            </select>
+
+                    </div>
 
         <div class="gallery" id="animeGallery"></div>
     </div>
@@ -1018,6 +1046,308 @@ const animes = [
 "status": "Viendo Actualmente"
 }
 ];   
+
+// Modificar el array mediaItems para incluir los tres tipos
+const mediaItems = [
+    // Mantener todos los animes existentes con type: 'anime'
+    ...animes.map(anime => ({...anime, type: 'anime'})),
+    // Ejemplos de series
+    {
+        "title": "Breaking Bad",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHGZV4jVq5iq7S7FeUDNTjSuxwuvCI8n0Jfg&s",
+        "episode": "62/62",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "Dr House",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/1679eba6-66a9-40e6-8504-bf2aaba329e7/5cebb677-6fe3-4615-8aeb-d2ef74320f35?host=wbd-images.prod-vod.h264.io&partner=beamcom",
+        "episode": "62/62",
+        "status":"Viendo Actualmente",
+        "type": "series"
+    },
+    {
+        "title": "The Walking Dead",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/933E0D6CAF547F41DEB8C66ECE2DC2B7246A6590FF25AEA936859FE934336EB5/scale?width=1200&aspectRatio=1.78&format=webp",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "Stranger Things",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://occ-0-8407-1360.1.nflxso.net/dnm/api/v6/Qs00mKCpRvrkl3HZAN5KwEL1kpE/AAAABZHclp-1JynUWnj9GdlOIvdYHUxD_rBSmk_Q53L_xPrPHOrv9tobzVvkBJCOshIp4P0hDc_3Zus-1ACtLZjGd0GF682Bf46iZQXVIk4hwY1mWsSG_9enpVAi_qNn08Nr-kAT2A.jpg?r=c68",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "El Juego del Calamar",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://ca-times.brightspotcdn.com/dims4/default/5248b88/2147483647/strip/true/crop/5906x3937+0+0/resize/2400x1600!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F58%2F4e%2Fa59edfeb4c00b85217973e5560f6%2Fsquidgame-unit-104-442.jpg",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "La Casa de Papel",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://cdn.mos.cms.futurecdn.net/9mWyVUzDofCEbxpp7zcXuj.jpg",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "Peaky Blinders",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "    https://cdn.webshopapp.com/shops/268192/files/433182623/the-peaky-blinders.jpg",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "La Ley de los Audases",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://dnm.nflximg.net/api/v6/BvVbc2Wxr2w6QuoANoSpJKEIWjQ/AAAAQZBxHwgdckeDrNVMZu9A6gfhhoEYrNM6tU34b_E_z813NtRn7TQUpP3c-kIL3p0zBWZgAsXx6ExFMVSFEmi7f0mRQB1EThuayLZdIwOofs_XxQ73XgfxndlWSsjWVhaGAGNSV_TU3izQxYy-IoeAcRBmNy8.jpg?r=2da",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "Arcane",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://es.gizmodo.com/app/uploads/2023/11/ee399381a882cf98af4dd0f6dc5f2398.jpg",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "El Encargado",
+        "category": "Comedia",
+        "score": "10/10",
+        "image": "https://www.ciudad.com.ar/resizer/v2/la-familia-basurto-accionaria-contra-el-encargado-BVANDPZCFVEDXOESHEL4NVEQR4.png?auth=d1c33f0dc8095e8f579b2654c728a1416938f05fc025ac4d74db16f116dc833e&width=767",
+        "episode": "T11/T11",
+        "status":"Completados",
+        "type": "series"
+    },
+    {
+        "title": "Los Simpson",
+        "category": "Comedia",
+        "score": "10/10",
+        "image": "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/30F15DCD4C14B8515FCE3652637EE2E9D61D715B07CA485878889429D393CFD5/scale?width=1200&aspectRatio=1.78&format=webp",
+        "episode": "T11/T11",
+        "status":"Viendo Actualmente",
+        "type": "series"
+    },
+    {
+        "title": "Casados con Hijos",
+        "category": "Comedia",
+        "score": "10/10",
+        "image": "https://resizer.glanacion.com/resizer/v2/archivo-casados-con-hijos-llegara-a-netflix-este-KSVN6FB3VZEGNEL2WQOIH4T5OQ.jpg?auth=29edea2f6e28371e06cc737648d50823c55c634b981d874bb64e38f6df1f7c10&width=1280&height=854&quality=70&smart=true",
+        "episode": "T11/T11",
+        "status":"Viendo Actualmente",
+        "type": "series"
+    },
+    {
+        "title": "Pablo Escobar, el patrón del mal",
+        "category": "Narcos",
+        "score": "10/10",
+        "image": "https://caracolinternacional.com/wp-content/uploads/2024/04/Pablo-Escobar-el-patron-del-mal.jpg",
+        "episode": "T11/T11",
+        "status":"Viendo Actualmente",
+        "type": "series"
+    },
+
+
+
+
+
+    // Películas
+    {
+        "title": "Chernobyl: La Película",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://img.freepik.com/fotos-premium/escalofriante-cartel-pelicula-que-representa-desastre-nuclear-chernobyl-paisaje-desolado_40687-572.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Capitán América: El Primer Vengador",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/95C976CA3FF6E5D7434874C3D705E133D8F1AF970ED3A319D90CD7C8BC36A83D/scale?width=1200&aspectRatio=1.78&format=webp",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Linea de Fuego",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://m.media-amazon.com/images/S/pv-target-images/22a1dc784ed79611b4fbf9227473b9c977dfdeae1d8f6c33344bde7300ed6d21.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Sin Novedad en el Frente",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://hips.hearstapps.com/hmg-prod/images/sin-novedad-en-el-frente-netflix-1667731037.jpeg?crop=0.75xw:1xh;center,top&resize=1200:*",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Atrapame si puedes",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://play-lh.googleusercontent.com/proxy/GUM0hYdiRwGkVJRC8c0ZQxGurBXJg1ABPxDTc4C7MIRyITsJVJFiBganN04TuCe9Dcg2Qoh2M9aHZ4emonVIC3rhooXSiN4426-Wo809rj-_0xENMA=s1920-w1920-h1080",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "El Planeta de los Simios: Nuevo Reino",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://i.blogs.es/c52f60/captura-de-pantalla-2023-11-10-a-las-16.23.38/1366_2000.jpeg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Sing: ¡ven y canta!",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://xpot.sv/wp-content/uploads/2024/10/sing-1024x554.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Ouija: La Película",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://hips.hearstapps.com/es.h-cdn.co/fotoes/images/peliculas/ouija-2014/travesuras-de-adolescente-con-sello-blumhouse/28136756-2-esl-ES/Travesuras-de-adolescente-con-sello-Blumhouse.jpg?crop=0.822265625xw:1xh;center,top&resize=1200:*",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Ouija: El origen del mal",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/75a74300-c086-497a-8cc7-6b1e1cc1f172/62c2ff0f275f52a12f818793998bcc40bfbfce45.jpg?host=wbd-images.prod-vod.h264.io&partner=beamcom",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+
+    {
+        "title": "Corazones de hierro",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://m.media-amazon.com/images/S/pv-target-images/11e95c583259b04a7330a0c515813124775bb1b938e7896c74c8035fc600106a._SX1080_FMjpg_.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Hermanos de sangre",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://occ-0-8407-1360.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABfn6qvKq0_VZ4C8Sk_00afqYWNBMMYjAonf1JaTqbwCunimI-rmVmh2yKH3vvvXlt_Jb1s-IuiAiJcbj7AbqmS7gnl1y6bJZ7CA1wZiCTmbXqM9ZPsnRgvYm.jpg?r=2fe",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Guerra Mundial Z",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2013/06/231595-critica-guerra-mundial-z.jpg?tf=3840x",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "El precio del mañana",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://www.cinevistablog.com/wp-content/uploads/2011/11/el-precio-del-manana-in-time-de-andrew-niccol_opt2_.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Monsters 103: Emociones del dragón...",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://occ-0-8407-1722.1.nflxso.net/dnm/api/v6/Qs00mKCpRvrkl3HZAN5KwEL1kpE/AAAABYBCl4BpT6wGo5Mymc1RwF-cOTPlfxJhAIzSkP5pC9WRrXsyqF1zAqH5Dvi7da1ffykYFW_WIvMIU11b-E8MkIrg_3q1Wvr0xk0H.jpg?r=3ab",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    {
+        "title": "Red Social",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://decine21.com/img/upload/videos/obras/la-red-social-21036/la-red-social-21036-t1.mp4.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+    
+    {
+
+        "title": "Jugar en casa",
+        "category": "Drama, Crimen",
+        "score": "10/10",
+        "image": "https://lacorriente.com/wp-content/uploads/2022/02/jugar.en_.casa_.jpg",
+        "duration": "175 min",
+        "status": "Completados",
+        "type": "movie"
+    },
+
+    // HENTAI
+
+    {
+
+        "title": "Overflow",
+        "category": "Hentai",
+        "score": "10/10",
+        "image": "https://i.pinimg.com/736x/c7/e8/6e/c7e86e83b60b753bfe0647fc677f2140.jpg",
+        "status": "Completados",
+        "episode":"8/8",
+        "type": "Hentai"
+    }
+
+];
+
+function init() {
+    setupEventListeners();
+    // Mostrar animes por defecto al cargar la página
+    const defaultContent = mediaItems.filter(item => item.type === 'anime');
+    displayContent(defaultContent);
+    updateStats();
+
+}
+
+
 const elements = {
     gallery: document.getElementById('animeGallery'),
     sidebar: document.querySelector('.sidebar'),
@@ -1036,14 +1366,15 @@ function createAnimeCard(anime) {
     const card = document.createElement('div');
     card.className = 'anime-card';
     card.innerHTML = `
-        <img src="${anime.image}" alt="${anime.title}" loading="lazy" class="anime-image">
-        <div class="anime-info">
-            <h2 class="anime-title" style="color: rgb(163, 159, 154);">${anime.title}</h2>
-            <p class="anime-category" style="color: rgba(168,160,149);">${anime.category}</p>
-            <p class="episode" style="color:rgb(168,160,149);";>Vistos: ${anime.episode}</p>
-            <p class="anime-score">${anime.score}</p>
-        </div>
-    `;
+    <img src="${anime.image}" alt="${anime.title}" loading="lazy" class="anime-image">
+    <div class="anime-info">
+        <h2 class="anime-title" style="color: rgb(163, 159, 154);">${anime.title}</h2>
+        <p class="anime-category" style="color: rgba(168,160,149);">${anime.category}</p>
+        <p class="episode" style="color:rgb(168,160,149);">Vistos: ${anime.episode}</p>
+        <p class="anime-score">${anime.score}</p>
+    </div>
+`;
+
 
     // Agregar evento de clic a la imagen para abrir el modal
     const imgElement = card.querySelector('.anime-image');
@@ -1075,34 +1406,39 @@ function displayAnimes(animeList) {
         elements.gallery.appendChild(fragment);
     }
     
-    updateStats();
+
 }
 
-function filterAnimes() {
-    const searchTerm = (elements.mainSearch.value || elements.sidebarSearch.value).toLowerCase();
-    const filteredAnimes = animes.filter(anime => 
-        anime.title.toLowerCase().includes(searchTerm) ||
-        anime.category.toLowerCase().includes(searchTerm)
-    );
-    displayAnimes(filteredAnimes);
+function displayContent(items) {
+    elements.gallery.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+
+    if (items.length === 0) {
+        const noResultsMessage = document.createElement('div');
+        noResultsMessage.className = 'no-results';
+        noResultsMessage.textContent = '❌ Sin Resultados';
+        elements.gallery.appendChild(noResultsMessage);
+    } else {
+        items.forEach(item => {
+            const card = createContentCard(item);
+            fragment.appendChild(card);
+        });
+        elements.gallery.appendChild(fragment);
+    }
+
 }
 
-function filterByStatus(status) {
-    const filteredAnimes = status === 'Todos los Animes' 
-        ? animes 
-        : animes.filter(anime => anime.status.includes(status));
-    displayAnimes(filteredAnimes);
-}
-
-
-
+// Actualizar las estadísticas para contar solo animes
 function updateStats() {
+    const animeItems = mediaItems.filter(item => item.type === 'anime');
+
+
     const stats = {
-        total: animes.length,
-        completed: animes.filter(anime => anime.status.includes('Completados')).length,
-        watching: animes.filter(anime => anime.status.includes('Viendo Actualmente')).length,
-        abandoned: animes.filter(anime => anime.status.includes('Abandonados')).length,
-        holding: animes.filter(anime => anime.status.includes('En espera')).length
+        total: animeItems.length,
+        completed: animeItems.filter(item => item.status.includes('Completados')).length,
+        watching: animeItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        abandoned: animeItems.filter(item => item.status.includes('Abandonados')).length,
+        holding: animeItems.filter(item => item.status.includes('En espera')).length
     };
 
     Object.entries(stats).forEach(([key, value]) => {
@@ -1110,10 +1446,109 @@ function updateStats() {
         if (element) element.textContent = value;
     });
 }
-function init() {
-    setupEventListeners();
-    displayAnimes(animes);
+
+function updateHentaiStats() {
+    const hentaiItems = mediaItems.filter(item => item.type === 'Hentai');
+
+    const stats = {
+        total: hentaiItems.length,
+        completed: hentaiItems.filter(item => item.status.includes('Completados')).length,
+        watching: hentaiItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        abandoned: hentaiItems.filter(item => item.status.includes('Abandonados')).length,
+        holding: hentaiItems.filter(item => item.status.includes('En espera')).length
+    };
+
+    Object.entries(stats).forEach(([key, value]) => {
+        const element = document.getElementById(`${key}Count`);
+        if (element) element.textContent = value;
+    });
 }
+
+function updateSeriesStats() {
+    const seriesItems = mediaItems.filter(item => item.type === 'series');
+
+    const stats = {
+        total: seriesItems.length,
+        completed: seriesItems.filter(item => item.status.includes('Completados')).length,
+        watching: seriesItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        abandoned: seriesItems.filter(item => item.status.includes('Abandonados')).length,
+        holding: seriesItems.filter(item => item.status.includes('En espera')).length
+    };
+
+    Object.entries(stats).forEach(([key, value]) => {
+        const element = document.getElementById(`${key}Count`);
+        if (element) element.textContent = value;
+    });
+}
+
+function updateMovieStats() {
+    const movieItems = mediaItems.filter(item => item.type === 'movie');
+
+    const stats = {
+        total: movieItems.length,
+        completed: movieItems.filter(item => item.status.includes('Completados')).length,
+        watching: movieItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        abandoned: movieItems.filter(item => item.status.includes('Abandonados')).length,
+        holding: movieItems.filter(item => item.status.includes('En espera')).length
+    };
+
+    Object.entries(stats).forEach(([key, value]) => {
+        const element = document.getElementById(`${key}Count`);
+        if (element) element.textContent = value;
+    });
+}
+
+
+
+// Modificar la función de búsqueda
+function filterAnimes() {
+    const searchTerm = (elements.mainSearch.value || elements.sidebarSearch.value).toLowerCase();
+    const currentView = document.querySelector('.filter-button.active')?.textContent || 'Todos los Animes';
+    
+    let filteredItems = mediaItems;
+    
+    // Aplicar filtro de tipo según la vista actual
+    if (currentView === 'Series/Películas') {
+        filteredItems = filteredItems.filter(item => item.type === 'series');
+    } else {
+        filteredItems = filteredItems.filter(item => item.type === 'anime');
+    }
+    
+    // Aplicar filtro de búsqueda
+    filteredItems = filteredItems.filter(item => 
+        item.title.toLowerCase().includes(searchTerm) ||
+        item.category.toLowerCase().includes(searchTerm)
+    );
+    
+    displayAnimes(filteredItems);
+}
+
+// Modificar la función de filtrado
+function filterByStatus(status) {
+    let filteredMedia;
+    
+    if (status === 'Series/Películas') {
+        // Mostrar solo series y películas
+        filteredMedia = mediaItems.filter(item => item.type === 'series');
+    } else if (status === 'Todos los Animes') {
+        // Mostrar solo animes
+        filteredMedia = mediaItems.filter(item => item.type === 'anime');
+    } else {
+        // Para otros filtros, mantener la separación por tipo
+        filteredMedia = mediaItems.filter(item => 
+            item.type === 'anime' && item.status.includes(status)
+        );
+    }
+    
+    displayAnimes(filteredMedia);
+}
+
+
+
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -1140,33 +1575,162 @@ function setupEventListeners() {
     document.getElementById('openSidebar').addEventListener('click', toggleSidebar);
     document.getElementById('sortOptions').addEventListener('change', sortAnimes); // Añadido
 }
-function sortAnimes() {
+// Función mejorada para ordenar el contenido
+function sortContent() {
     const sortOption = document.getElementById('sortOptions').value;
-    let sortedAnimes;
-
+    const contentType = document.getElementById('contentTypeSelect').value;
+    
+    // Filtrar primero por tipo de contenido
+    let currentContent = mediaItems.filter(item => item.type === contentType);
+    
     switch (sortOption) {
         case 'default':
-            sortedAnimes = animes; // Mantener el orden original
+            // Mantener el orden original
             break;
         case 'az':
-            sortedAnimes = [...animes].sort((a, b) => a.title.localeCompare(b.title));
+            currentContent.sort((a, b) => a.title.localeCompare(b.title));
             break;
         case 'za':
-            sortedAnimes = [...animes].sort((a, b) => b.title.localeCompare(a.title));
+            currentContent.sort((a, b) => b.title.localeCompare(a.title));
             break;
         case 'rating':
-            sortedAnimes = [...animes].sort((a, b) => {
-                const scoreA = parseFloat(a.score) || 0; // Asegúrate de que la calificación sea un número
-                const scoreB = parseFloat(b.score) || 0;
-                return scoreB - scoreA; // Ordenar de mayor a menor
+            currentContent.sort((a, b) => {
+                // Manejar calificaciones especiales como "🔥" o "🎻"
+                const getNumericScore = (score) => {
+                    if (score.includes('🔥') || score.includes('🎻')) return 10;
+                    return parseFloat(score) || 0;
+                };
+                
+                const scoreA = getNumericScore(a.score);
+                const scoreB = getNumericScore(b.score);
+                return scoreB - scoreA;
             });
             break;
+    }
+    
+    displayContent(currentContent);
+}
+// Modificar la función de filtrado
+function filterByStatus(status) {
+    const contentType = document.getElementById('contentTypeSelect').value;
+    let filteredContent = mediaItems.filter(item => item.type === contentType);
+    
+    if (status !== 'Todos los Animes') {
+        filteredContent = filteredContent.filter(item => {
+            if (Array.isArray(item.status)) {
+                return item.status.includes(status);
+            }
+            return item.status === status;
+        });
+    }
+    
+    displayContent(filteredContent);
+}
+
+
+// Función para cambiar el placeholder del buscador
+function updateSearchPlaceholder() {
+    const contentType = document.getElementById('contentTypeSelect').value;
+    const searchInputs = [elements.mainSearch, elements.sidebarSearch];
+    
+    let placeholder;
+    switch(contentType) {
+        case 'anime':
+            placeholder = 'Buscar anime...';
+            updateStats();
+
+            break;
+        case 'series':
+            placeholder = 'Buscar serie...';
+            updateSeriesStats();
+
+            break;
+        case 'movie':
+            placeholder = 'Buscar película...';
+            updateMovieStats();
+
+            break;
+        case 'Hentai':
+            placeholder = 'Buscar Hentai...';
+            updateHentaiStats();
+
+            break;
+
         default:
-            sortedAnimes = animes; // Si no hay opción válida, no se ordena
+            placeholder = 'Buscar...';
     }
 
-    displayAnimes(sortedAnimes); // Mostrar los animes ordenados
+    searchInputs.forEach(input => {
+        if (input) input.placeholder = placeholder;
+    });
 }
+
+
+// Modificar la función de filtrado para incluir el tipo de contenido
+function filterContent() {
+    const searchTerm = (elements.mainSearch.value || elements.sidebarSearch.value).toLowerCase();
+    const contentType = document.getElementById('contentTypeSelect').value;
+    
+    let filteredContent = mediaItems.filter(item => item.type === contentType);
+    
+    if (searchTerm) {
+        filteredContent = filteredContent.filter(item => 
+            item.title.toLowerCase().includes(searchTerm) ||
+            item.category.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    displayContent(filteredContent);
+}
+
+// Función mejorada para mostrar el contenido
+
+// Función para crear tarjetas según el tipo de contenido
+function createContentCard(item) {
+    const card = document.createElement('div');
+    card.className = 'anime-card';
+    
+    let episodeOrDuration = '';
+    if (item.type === 'movie') {
+        episodeOrDuration = `Duración: ${item.duration}`;
+    } else {
+        episodeOrDuration = `Vistos: ${item.episode}`;
+    }
+    
+    card.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" loading="lazy" class="anime-image">
+        <div class="anime-info">
+            <h2 class="anime-title" style="color: rgb(163, 159, 154);">${item.title}</h2>
+            <p class="anime-category" style="color: rgba(168,160,149);">${item.category}</p>
+            <p class="episode" style="color:rgb(168,160,149);">${episodeOrDuration}</p>
+            <p class="anime-score">${item.score}</p>
+        </div>
+    `;
+    
+    // Mantener el evento del modal
+    const imgElement = card.querySelector('.anime-image');
+    imgElement.addEventListener('click', function() {
+        const modal = document.getElementById('modal');
+        const imgModal = document.getElementById('img-modal');
+        modal.style.display = 'flex';
+        imgModal.src = this.src;
+    });
+    
+    return card;
+}
+
+function setupEventListeners() {
+    elements.mainSearch.addEventListener('input', filterContent);
+    elements.sidebarSearch.addEventListener('input', filterContent);
+    document.getElementById('contentTypeSelect').addEventListener('change', () => {
+        updateSearchPlaceholder();
+        filterContent();
+    });
+    document.getElementById('closeSidebar').addEventListener('click', toggleSidebar);
+    document.getElementById('openSidebar').addEventListener('click', toggleSidebar);
+    document.getElementById('sortOptions').addEventListener('change', sortContent);
+}
+
 
     </script>
 
@@ -1175,3 +1739,5 @@ function sortAnimes() {
     
 </body>
 </html>
+
+
