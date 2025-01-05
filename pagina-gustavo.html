@@ -138,6 +138,7 @@
             object-fit: cover;
             cursor: pointer;
         }
+   
 
         .anime-info {
             padding: 1rem;
@@ -359,6 +360,11 @@ select.filter-button:hover {
             .sidebar show-sidebar{
                 height: 100%;
                  }
+                 .anime-card img {
+        cursor: none; /* Deshabilitar interacción en pantallas pequeñas */
+        pointer-events: none; /* Deshabilitar clic */
+    }
+
 }
 
     </style>
@@ -406,11 +412,11 @@ select.filter-button:hover {
                 <button class="menu-button" id="openSidebar">
                     <i class="fas fa-bars" style="color: black;"></i>
                 </button>
-                <a href="pagina.html" style="padding:5px;">
+                <a href="pagina-gustavo.html" style="padding:5px;">
                     <img src="https://i.ibb.co/L8s0GCz/logo-2.png" alt="Descripción del logo" style="width: 50px; height: 50px;">
                 </a>
             
-                <h1 style="color:rgb(5, 5, 5); margin-bottom: 5px;">Anime Diary</h1><h2 style="font-size: small; padding-left: 400px;">- Agregar Número de Series y Películas Vistas en menu lateral <br> - Quitar el modal del telefono</h2>
+                <h1 style="color:rgb(5, 5, 5); margin-bottom: 5px;">Anime Diary</h1>
             </div>
         </header>
         
@@ -432,7 +438,7 @@ select.filter-button:hover {
                 <button class="filter-button" onclick="filterByStatus('Completados')">
                     Completados
                 </button>
-                <button class="filter-button" onclick="filterByStatus('Viendo Actualmente')">
+                <button class="filter-button" onclick="filterByStatus('Viendo')">
                     Viendo
                 </button>
                 <button class="filter-button" onclick="filterByStatus('Abandonados')">
@@ -451,7 +457,6 @@ select.filter-button:hover {
             </div>
             <select id="contentTypeSelect" class="filter-button">
                 <option value="anime">Animes</option>
-                <option value="Hentai">H🔥</option>
                 <option value="series">Series</option>
                 <option value="movie">Películas</option>
             </select>
@@ -537,7 +542,7 @@ const animes = [
 "category": "acción, comedia, superpoderes, escolar, Shounen",
 "score": "8.0/10",
 "image": "https://i.ibb.co/Srt7mGw/boku-no-hero.webp",
-"status": "Viendo Actualmente"
+"status": "Viendo"
 
 },
 {
@@ -598,9 +603,9 @@ const animes = [
 "title": "Dr Stone",
 "category": "aventura, ciencia, Shounen",
 "score": "8.5/10",
-"image": "https://i.ibb.co/0tsCqkR/dr-stone.webp",
+"image": "https://i.pinimg.com/originals/6c/b9/83/6cb9833b7bc1b2fde9ac7a6152e772fc.jpg",
 "episode": "3/35",
-"status": "Viendo Actualmente"
+"status": "Viendo"
 
 },
 {
@@ -807,7 +812,7 @@ const animes = [
 "score": "🔥/10",
 "image": "https://i.ibb.co/DC6kR3H/One-Piece.webp",
 "episode": "1199/1199",
-"status": "Viendo Actualmente"
+"status": "Viendo"
 
 },
 {
@@ -1043,7 +1048,7 @@ const animes = [
 "score": "8/10",
 "image": "https://i.ibb.co/xXwFPc6/dragon-ball-daima.webp",
 "episode": "2/20",
-"status": "Viendo Actualmente"
+"status": "Viendo"
 }
 ];   
 
@@ -1067,7 +1072,7 @@ const mediaItems = [
         "score": "10/10",
         "image": "https://beam-images.warnermediacdn.com/BEAM_LWM_DELIVERABLES/1679eba6-66a9-40e6-8504-bf2aaba329e7/5cebb677-6fe3-4615-8aeb-d2ef74320f35?host=wbd-images.prod-vod.h264.io&partner=beamcom",
         "episode": "62/62",
-        "status":"Viendo Actualmente",
+        "status":"Viendo",
         "type": "series"
     },
     {
@@ -1148,7 +1153,7 @@ const mediaItems = [
         "score": "10/10",
         "image": "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/30F15DCD4C14B8515FCE3652637EE2E9D61D715B07CA485878889429D393CFD5/scale?width=1200&aspectRatio=1.78&format=webp",
         "episode": "T11/T11",
-        "status":"Viendo Actualmente",
+        "status":"Viendo",
         "type": "series"
     },
     {
@@ -1157,7 +1162,7 @@ const mediaItems = [
         "score": "10/10",
         "image": "https://resizer.glanacion.com/resizer/v2/archivo-casados-con-hijos-llegara-a-netflix-este-KSVN6FB3VZEGNEL2WQOIH4T5OQ.jpg?auth=29edea2f6e28371e06cc737648d50823c55c634b981d874bb64e38f6df1f7c10&width=1280&height=854&quality=70&smart=true",
         "episode": "T11/T11",
-        "status":"Viendo Actualmente",
+        "status":"Viendo",
         "type": "series"
     },
     {
@@ -1166,7 +1171,7 @@ const mediaItems = [
         "score": "10/10",
         "image": "https://caracolinternacional.com/wp-content/uploads/2024/04/Pablo-Escobar-el-patron-del-mal.jpg",
         "episode": "T11/T11",
-        "status":"Viendo Actualmente",
+        "status":"Viendo",
         "type": "series"
     },
 
@@ -1321,20 +1326,9 @@ const mediaItems = [
         "duration": "175 min",
         "status": "Completados",
         "type": "movie"
-    },
-
-    // HENTAI
-
-    {
-
-        "title": "Overflow",
-        "category": "Hentai",
-        "score": "10/10",
-        "image": "https://i.pinimg.com/736x/c7/e8/6e/c7e86e83b60b753bfe0647fc677f2140.jpg",
-        "status": "Completados",
-        "episode":"8/8",
-        "type": "Hentai"
     }
+
+ 
 
 ];
 
@@ -1436,26 +1430,9 @@ function updateStats() {
     const stats = {
         total: animeItems.length,
         completed: animeItems.filter(item => item.status.includes('Completados')).length,
-        watching: animeItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        watching: animeItems.filter(item => item.status.includes('Viendo')).length,
         abandoned: animeItems.filter(item => item.status.includes('Abandonados')).length,
         holding: animeItems.filter(item => item.status.includes('En espera')).length
-    };
-
-    Object.entries(stats).forEach(([key, value]) => {
-        const element = document.getElementById(`${key}Count`);
-        if (element) element.textContent = value;
-    });
-}
-
-function updateHentaiStats() {
-    const hentaiItems = mediaItems.filter(item => item.type === 'Hentai');
-
-    const stats = {
-        total: hentaiItems.length,
-        completed: hentaiItems.filter(item => item.status.includes('Completados')).length,
-        watching: hentaiItems.filter(item => item.status.includes('Viendo Actualmente')).length,
-        abandoned: hentaiItems.filter(item => item.status.includes('Abandonados')).length,
-        holding: hentaiItems.filter(item => item.status.includes('En espera')).length
     };
 
     Object.entries(stats).forEach(([key, value]) => {
@@ -1470,7 +1447,7 @@ function updateSeriesStats() {
     const stats = {
         total: seriesItems.length,
         completed: seriesItems.filter(item => item.status.includes('Completados')).length,
-        watching: seriesItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        watching: seriesItems.filter(item => item.status.includes('Viendo')).length,
         abandoned: seriesItems.filter(item => item.status.includes('Abandonados')).length,
         holding: seriesItems.filter(item => item.status.includes('En espera')).length
     };
@@ -1487,7 +1464,7 @@ function updateMovieStats() {
     const stats = {
         total: movieItems.length,
         completed: movieItems.filter(item => item.status.includes('Completados')).length,
-        watching: movieItems.filter(item => item.status.includes('Viendo Actualmente')).length,
+        watching: movieItems.filter(item => item.status.includes('Viendo')).length,
         abandoned: movieItems.filter(item => item.status.includes('Abandonados')).length,
         holding: movieItems.filter(item => item.status.includes('En espera')).length
     };
