@@ -485,7 +485,6 @@ const animes = [
 "score": "7.5/10",
 "image": "https://i.ibb.co/Y8V0fzb/ao-no-Exorcist.webp",
 "episode": "25/25",
-"fecha": "2025",
 "status": "Completados"
 
 
@@ -496,7 +495,6 @@ const animes = [
 "score": "8.0/10",
 "image": "https://i.ibb.co/vLQGz0r/another.webp",
 "episode": "12/12",
-"fecha": "2025",
 "status": "Completados"
 
 },
@@ -577,6 +575,7 @@ const animes = [
 "score": "9/10",
 "image": "https://i.ibb.co/6bGxMfY/chainsawman.webp",
 "episode": "12/12",
+"fecha": "2025",
 "status": ["Completados", "En espera"] // Cambiado a un array
 
 },
@@ -658,6 +657,7 @@ const animes = [
 "score": "9.25/10",
 "image": "https://i.ibb.co/fkLT01t/fire-force.webp",
 "episode": "48/48",
+"fecha": "2025",
 "status": "En espera"
 
 },
@@ -667,6 +667,7 @@ const animes = [
 "score": "🔥/10",
 "image": "https://i.ibb.co/YWPgnNp/frieren.webp",
 "episode": "28/28",
+"fecha": "2025",
 "status": ["Completados", "En espera"] // Cambiado a un array
 
 },
@@ -722,7 +723,7 @@ const animes = [
 "score": "9.5/10",
 "image": "https://i.ibb.co/kJh5FMY/kaiju.webp",
 "episode": "12/12",
-"date": "Julio de 2025",
+"fecha": "2025",
 "status": ["Completados", "En espera"]
 },
 {
@@ -758,6 +759,7 @@ const animes = [
 "score": "9.25/10",
 "image": "https://i.ibb.co/rwvjj8Y/Jujutsu-Kaisen.webp",
 "episode": "47/47",
+"fecha": "2025",
 "status": ["Completados", "En espera"] // Cambiado a un array
 
 },
@@ -767,6 +769,7 @@ const animes = [
 "score": "10/10",
 "image": "https://i.ibb.co/YLG7Fxr/Mushoku-Tensei.webp",
 "episode": "48/48",
+"fecha": "2025",
 "status": ["Completados", "En espera"] // Cambiado a un array
 
 },
@@ -1021,6 +1024,7 @@ const animes = [
 "score": "🔥/10",
 "image": "https://i.ibb.co/wN6MMgL/dan-da-dan.png",
 "episode": "12/12",
+"fecha": "2025",
 "status": ["Completados", "En espera"] // Cambiado a un array
 
 },
@@ -1689,7 +1693,7 @@ function createContentCard(item) {
             <h2 class="anime-title" style="color: rgb(163, 159, 154);">${item.title}</h2>
             <p class="anime-category" style="color: rgba(168,160,149);">${item.category}</p>
             <p class="episode" style="color:rgb(168,160,149);">${episodeOrDuration}</p>
-            <p class="fecha" style="color: rgba(168,160,149);">Fecha: ${item.fecha || 'No especificada'}</p>
+            <p class="fecha" style="color: rgba(168,160,149);">Próximamente en: ${item.fecha || 'No especificada'}</p>
             <p class="anime-score">${item.score}</p>
         </div>
     `;
