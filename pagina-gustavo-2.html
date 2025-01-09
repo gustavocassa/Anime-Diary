@@ -1672,7 +1672,6 @@ function filterContent() {
 
 // Función mejorada para mostrar el contenido
 
-// Función para crear tarjetas según el tipo de contenido
 function createContentCard(item) {
     const card = document.createElement('div');
     card.className = 'anime-card';
@@ -1690,8 +1689,8 @@ function createContentCard(item) {
             <h2 class="anime-title" style="color: rgb(163, 159, 154);">${item.title}</h2>
             <p class="anime-category" style="color: rgba(168,160,149);">${item.category}</p>
             <p class="episode" style="color:rgb(168,160,149);">${episodeOrDuration}</p>
+            <p class="fecha" style="color: rgba(168,160,149);">Fecha: ${item.fecha || 'No especificada'}</p>
             <p class="anime-score">${item.score}</p>
-  
         </div>
     `;
     
@@ -1706,6 +1705,7 @@ function createContentCard(item) {
     
     return card;
 }
+
 
 function setupEventListeners() {
     elements.mainSearch.addEventListener('input', filterContent);
