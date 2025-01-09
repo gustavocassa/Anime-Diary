@@ -161,6 +161,10 @@
             color: var(--primary-color);
         }
 
+        .anime-date {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
@@ -715,7 +719,7 @@ const animes = [
 "image": "https://i.ibb.co/kJh5FMY/kaiju.webp",
 "episode": "12/12",
 "status": ["Completados", "En espera"],
-"date":"Julio 2025"
+"date": "Julio de 2025"
 },
 {
 "title": "Kaguya Sama",
@@ -1367,7 +1371,7 @@ function createAnimeCard(anime) {
         <p class="anime-category" style="color: rgba(168,160,149);">${anime.category}</p>
         <p class="episode" style="color:rgb(168,160,149);">Vistos: ${anime.episode}</p>
         <p class="anime-score">${anime.score}</p>
-        <p class="date">${anime.date}</p>
+        <p class="anime-date">${anime.date}</p>
     </div>
 `;
 
@@ -1683,6 +1687,7 @@ function createContentCard(item) {
             <p class="anime-category" style="color: rgba(168,160,149);">${item.category}</p>
             <p class="episode" style="color:rgb(168,160,149);">${episodeOrDuration}</p>
             <p class="anime-score">${item.score}</p>
+  
         </div>
     `;
     
