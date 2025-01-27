@@ -1871,12 +1871,12 @@ select.filter-button:hover {
         "status": "Viendo"
         },
         {
-        "title": "Sentai Red Isekai de Boukensha ni Naru",
-        "category": "Isekai ,Fantasia, Accion",
-        "score": "7/10",
-        "image": "https://loucosporfilmeseseries.com.br/wp-content/uploads/2025/01/Sentai-Red-Isekai.png",
-        "episode": "12",
-        "status": "Viendo"
+        "title": "I Left my A-Rank Party to Help My Former Students Reach the Dungeon Depths!",
+        "category": "Acción, Aventura, Comedia, Fantasía",
+        "score": "4/10",
+        "image": "https://www.gamersegames.com.br/wp-content/uploads/2025/01/I-Left-my-A-Rank-Party-to-Help-My-Former-Students-Reach-the-Dungeon-Depths-1.webp",
+        "episode": "3/12",
+        "status": "Completados"
         }
     ];   
     
@@ -2564,7 +2564,7 @@ select.filter-button:hover {
         document.getElementById('sortOptions').addEventListener('change', sortContent);
     }
     
-    // Modificar la función handleNewContent para que también genere el código
+    // Reemplazar la función handleNewContent actual
     function handleNewContent(e) {
         e.preventDefault();
         
@@ -2582,53 +2582,34 @@ select.filter-button:hover {
         mediaItems.push(newContent);
 
         // Generar el código del nuevo contenido
-        const newCode = `
-        {
-        "title": "${newContent.title}",
-        "category": "${newContent.category}",
-        "score": "${newContent.score}",
-        "image": "${newContent.image}",
-        "episode": "${newContent.episode}",
-        "status": "${newContent.status}"
-        },`;
+        const newCode = `    {
+    "title": "${newContent.title}",
+    "category": "${newContent.category}",
+    "score": "${newContent.score}",
+    "image": "${newContent.image}",
+    "episode": "${newContent.episode}",
+    "status": "${newContent.status}"
+    },`;
 
-        // Crear un elemento temporal para copiar el código
-        const tempTextArea = document.createElement('textarea');
-        tempTextArea.value = newCode;
-        document.body.appendChild(tempTextArea);
-        tempTextArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempTextArea);
+        // Copiar al portapapeles
+        navigator.clipboard.writeText(newCode).then(() => {
+            // Mostrar el código en un cuadro de diálogo
+            const message = `✅ Contenido agregado exitosamente\n\n📋 Código copiado al portapapeles:\n\n${newCode}`;
+            alert(message);
+        });
 
-        // Guardar en localStorage
-        localStorage.setItem('mediaItems', JSON.stringify(mediaItems));
-
-        // Actualizar la visualización
+        // Actualizar visualización y estadísticas
         const contentType = document.getElementById('contentTypeSelect').value;
         const filteredContent = mediaItems.filter(item => item.type === contentType);
         displayContent(filteredContent);
+        updateStats();
 
-        // Actualizar estadísticas según el tipo
-        switch(newContent.type) {
-            case 'anime':
-                updateStats();
-                break;
-            case 'series':
-                updateSeriesStats();
-                break;
-            case 'movie':
-                updateMovieStats();
-                break;
-            case 'Hentai':
-                updateHentaiStats();
-                break;
-        }
-
-        // Limpiar el formulario
+        // Limpiar y ocultar el formulario
         e.target.reset();
-
-        // Mostrar mensaje de éxito y notificar que el código fue copiado
-        alert('Contenido agregado exitosamente.\nEl código ha sido copiado al portapapeles.');
+        const formContainer = document.getElementById('addContentForm');
+        const showButton = document.getElementById('showFormButton');
+        formContainer.style.display = 'none';
+        showButton.style.display = 'block';
     }
 
     // Asegurarse de que el event listener use la nueva función
@@ -2642,7 +2623,7 @@ select.filter-button:hover {
         document.getElementById('closeSidebar').addEventListener('click', toggleSidebar);
         document.getElementById('openSidebar').addEventListener('click', toggleSidebar);
         document.getElementById('sortOptions').addEventListener('change', sortContent);
-        document.getElementById('addContentForm').addEventListener('submit', handleNewContent);
+        document.getElementById('contentForm').addEventListener('submit', handleNewContent);
     }
     
     // Agregar este código JavaScript al final del archivo, antes del cierre de la etiqueta script
