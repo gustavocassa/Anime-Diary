@@ -456,13 +456,13 @@ select.filter-button:hover {
                 <option value="movie">Películas</option>
             </select>
 
-            <!-- Agregar este botón después del select de contentTypeSelect -->
-            <button id="showFormButton" class="filter-button" style="margin-left: auto; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; padding: 0;">
+            <button id="toggleFormButton" class="filter-button" style="margin-left: auto; width: 40px; height: 40px; border-radius: 50%; padding: 0; font-size: 24px; display: flex; align-items: center; justify-content: center;">
                 +
             </button>
+        </div>
 
-            <!-- Modificar el div del formulario para que esté oculto inicialmente -->
-            <div class="add-content-form" id="addContentForm" style="display: none; margin-bottom: 20px; background-color: rgba(24,26,27); padding: 20px; border-radius: 10px;">
+        <!-- Agregar el formulario aquí: -->
+        <div class="add-content-form" id="addContentForm" style="max-width:300px; display: none; margin-bottom: 20px; background-color: rgba(24,26,27); padding: 20px; border-radius: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <h3 style="color: white; margin: 0;">Agregar Nuevo Contenido</h3>
                     <button id="hideFormButton" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
@@ -485,29 +485,27 @@ select.filter-button:hover {
                     
                     <select id="newStatus" required
                             style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                        <option value="">Seleccionar Estado</option>
-                        <option value="Completados">Completados</option>
-                        <option value="Viendo">Viendo</option>
-                        <option value="Abandonados">Abandonados</option>
-                        <option value="En espera">En espera</option>
-                    </select>
-                    
-                    <select id="newType" required
-                            style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                        <option value="">Seleccionar Tipo</option>
-                        <option value="anime">Anime</option>
-                        <option value="series">Serie</option>
-                        <option value="movie">Película</option>
-                        <option value="Hentai">Hentai</option>
-                    </select>
-                    
-                    <button type="submit" 
-                            style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Agregar Contenido
-                    </button>
-                </form>
-            </div>
-
+                    <option value="">Seleccionar Estado</option>
+                    <option value="Completados">Completados</option>
+                    <option value="Viendo">Viendo</option>
+                    <option value="Abandonados">Abandonados</option>
+                    <option value="En espera">En espera</option>
+                </select>
+                
+                <select id="newType" required
+                        style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
+                    <option value="">Seleccionar Tipo</option>
+                    <option value="anime">Anime</option>
+                    <option value="series">Serie</option>
+                    <option value="movie">Película</option>
+                    <option value="Hentai">Hentai</option>
+                </select>
+                
+                <button type="submit" 
+                        style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Agregar Contenido
+                </button>
+            </form>
         </div>
 
         <div class="gallery" id="animeGallery"></div>
@@ -1877,6 +1875,14 @@ select.filter-button:hover {
         "image": "https://www.gamersegames.com.br/wp-content/uploads/2025/01/I-Left-my-A-Rank-Party-to-Help-My-Former-Students-Reach-the-Dungeon-Depths-1.webp",
         "episode": "3/12",
         "status": "Completados"
+        },
+        {
+        "title": "The Red Ranger Becomes an Adventurer in Another World",
+        "category": "Isekai ,Fantasia, Accion",
+        "score": "7/10",
+        "image": "https://www.animefeminist.com/wp-content/uploads/2025/01/The-Red-Ranger-Becomes-an-Adventurer-in-Another-World-1-scaled.jpg",
+        "episode": "3/12",
+        "status": "Viendo"
         }
     ];   
     
@@ -2168,7 +2174,6 @@ select.filter-button:hover {
             "episode":"8/8",
             "type": "Hentai"
         }
-    
     ];
     
     function init() {
@@ -2177,7 +2182,18 @@ select.filter-button:hover {
         const defaultContent = mediaItems.filter(item => item.type === 'anime');
         displayContent(defaultContent);
         updateStats();
-    
+
+        // Agregar manejo del botón toggle
+        document.getElementById('toggleFormButton').addEventListener('click', function() {
+            const form = document.getElementById('addContentForm');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                this.textContent = '-';
+            } else {
+                form.style.display = 'none';
+                this.textContent = '+';
+            }
+        });
     }
     
     
@@ -2564,7 +2580,7 @@ select.filter-button:hover {
         document.getElementById('sortOptions').addEventListener('change', sortContent);
     }
     
-    // Reemplazar la función handleNewContent actual
+    // Modificar la función handleNewContent para que también genere el código
     function handleNewContent(e) {
         e.preventDefault();
         
@@ -2582,34 +2598,53 @@ select.filter-button:hover {
         mediaItems.push(newContent);
 
         // Generar el código del nuevo contenido
-        const newCode = `    {
-    "title": "${newContent.title}",
-    "category": "${newContent.category}",
-    "score": "${newContent.score}",
-    "image": "${newContent.image}",
-    "episode": "${newContent.episode}",
-    "status": "${newContent.status}"
-    },`;
+        const newCode = `
+        {
+        "title": "${newContent.title}",
+        "category": "${newContent.category}",
+        "score": "${newContent.score}",
+        "image": "${newContent.image}",
+        "episode": "${newContent.episode}",
+        "status": "${newContent.status}"
+        },`;
 
-        // Copiar al portapapeles
-        navigator.clipboard.writeText(newCode).then(() => {
-            // Mostrar el código en un cuadro de diálogo
-            const message = `✅ Contenido agregado exitosamente\n\n📋 Código copiado al portapapeles:\n\n${newCode}`;
-            alert(message);
-        });
+        // Crear un elemento temporal para copiar el código
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = newCode;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
 
-        // Actualizar visualización y estadísticas
+        // Guardar en localStorage
+        localStorage.setItem('mediaItems', JSON.stringify(mediaItems));
+
+        // Actualizar la visualización
         const contentType = document.getElementById('contentTypeSelect').value;
         const filteredContent = mediaItems.filter(item => item.type === contentType);
         displayContent(filteredContent);
-        updateStats();
 
-        // Limpiar y ocultar el formulario
+        // Actualizar estadísticas según el tipo
+        switch(newContent.type) {
+            case 'anime':
+                updateStats();
+                break;
+            case 'series':
+                updateSeriesStats();
+                break;
+            case 'movie':
+                updateMovieStats();
+                break;
+            case 'Hentai':
+                updateHentaiStats();
+                break;
+        }
+
+        // Limpiar el formulario
         e.target.reset();
-        const formContainer = document.getElementById('addContentForm');
-        const showButton = document.getElementById('showFormButton');
-        formContainer.style.display = 'none';
-        showButton.style.display = 'block';
+
+        // Mostrar mensaje de éxito y notificar que el código fue copiado
+        alert('Contenido agregado exitosamente.\nEl código ha sido copiado al portapapeles.');
     }
 
     // Asegurarse de que el event listener use la nueva función
@@ -2623,44 +2658,15 @@ select.filter-button:hover {
         document.getElementById('closeSidebar').addEventListener('click', toggleSidebar);
         document.getElementById('openSidebar').addEventListener('click', toggleSidebar);
         document.getElementById('sortOptions').addEventListener('change', sortContent);
-        document.getElementById('contentForm').addEventListener('submit', handleNewContent);
-    }
-    
-    // Agregar este código JavaScript al final del archivo, antes del cierre de la etiqueta script
-    function setupFormVisibility() {
-        const formContainer = document.getElementById('addContentForm');
-        const showButton = document.getElementById('showFormButton');
-        const hideButton = document.getElementById('hideFormButton');
-
-        showButton.addEventListener('click', () => {
-            formContainer.style.display = 'block';
-            showButton.style.display = 'none';
-        });
-
-        hideButton.addEventListener('click', () => {
-            formContainer.style.display = 'none';
-            showButton.style.display = 'block';
-        });
-    }
-
-    // Modificar la función setupEventListeners para incluir la nueva configuración
-    function setupEventListeners() {
-        elements.mainSearch.addEventListener('input', filterContent);
-        elements.sidebarSearch.addEventListener('input', filterContent);
-        document.getElementById('contentTypeSelect').addEventListener('change', () => {
-            updateSearchPlaceholder();
-            filterContent();
-        });
-        document.getElementById('closeSidebar').addEventListener('click', toggleSidebar);
-        document.getElementById('openSidebar').addEventListener('click', toggleSidebar);
-        document.getElementById('sortOptions').addEventListener('change', sortContent);
-        document.getElementById('contentForm').addEventListener('submit', handleNewContent);
-        setupFormVisibility(); // Agregar esta línea
+        document.getElementById('addContentForm').addEventListener('submit', handleNewContent);
     }
     
     
         </script>
 </body>
 </html>
+
+
+
 
 
