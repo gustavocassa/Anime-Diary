@@ -174,7 +174,7 @@
     const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Error: ${response.status}`);
