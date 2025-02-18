@@ -28,9 +28,6 @@
     .anime-list {
       margin-top: 20px;
     }
-    .anime-list-item {
-      margin-bottom: 10px;
-    }
   </style>
 </head>
 <body>
@@ -41,18 +38,71 @@
   
   <div id="preloadedList" class="anime-list">
     <h2>Animes precargados</h2>
-    <ul>
-      <li class="anime-list-item">Naruto</li>
-      <li class="anime-list-item">One Piece</li>
-      <li class="anime-list-item">Attack on Titan</li>
-      <li class="anime-list-item">Demon Slayer</li>
-      <li class="anime-list-item">My Hero Academia</li>
-    </ul>
+    <div id="preloadedResults"></div>
   </div>
 
   <div id="result"></div>
 
   <script>
+    // Lista de animes precargados
+    const preloadedAnimes = ["Naruto", "One Piece", "Attack on Titan", "Demon Slayer", "My Hero Academia"];
+
+    // Función para cargar la información de los animes precargados
+    async function cargarAnimesPrecargados() {
+      const preloadedResults = document.getElementById("preloadedResults");
+      preloadedResults.innerHTML = "<p>Cargando animes precargados...</p>";
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Sinopsis</th>
+              <th>Episodios</th>
+              <th>Puntuación</th>
+              <th>Imagen</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (const anime of preloadedAnimes) {
+        const encodedName = encodeURIComponent(anime);
+        const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Error al cargar ${anime}: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.data.length > 0) {
+            const animeData = data.data[0]; // Tomamos el primer resultado
+            html += `
+              <tr>
+                <td>${animeData.title}</td>
+                <td>${animeData.synopsis || "Sin sinopsis disponible"}</td>
+                <td>${animeData.episodes || "Desconocido"}</td>
+                <td>${animeData.score || "N/A"}</td>
+                <td><img src="${animeData.images.jpg.image_url}" alt="${animeData.title}"></td>
+              </tr>
+            `;
+          }
+        } catch (error) {
+          console.error(`Error al cargar el anime ${anime}:`, error);
+        }
+      }
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      preloadedResults.innerHTML = html;
+    }
+
+    // Función para buscar animes
     async function buscarAnimes() {
       const animeName = document.getElementById("animeName").value;
       const encodedName = encodeURIComponent(animeName);
@@ -79,6 +129,7 @@
       }
     }
 
+    // Función para mostrar los resultados de búsqueda
     function mostrarResultados(animes) {
       let html = `
         <table>
@@ -114,6 +165,7 @@
       document.getElementById("result").innerHTML = html;
     }
 
+    // Función para borrar la búsqueda
     function borrarBusqueda() {
       // Limpiar el campo de búsqueda
       document.getElementById("animeName").value = "";
@@ -124,6 +176,9 @@
       // Mostrar la lista precargada nuevamente
       document.getElementById("preloadedList").style.display = "block";
     }
+
+    // Cargar los animes precargados al cargar la página
+    cargarAnimesPrecargados();
   </script>
 </body>
 </html>
