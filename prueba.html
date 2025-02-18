@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Animes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    img {
+      max-width: 100px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Buscar Animes</h1>
+  <input type="text" id="animeName" placeholder="Escribe el nombre del anime">
+  <button onclick="buscarAnimes()">Buscar</button>
+  <div id="result"></div>
+
+  <script>
+    async function buscarAnimes() {
+      const animeName = document.getElementById("animeName").value;
+      const encodedName = encodeURIComponent(animeName);
+      const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error al realizar la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.data.length > 0) {
+          mostrarResultados(data.data);
+        } else {
+          document.getElementById("result").innerHTML = "<p>No se encontraron resultados para el anime buscado.</p>";
+        }
+      } catch (error) {
+        document.getElementById("result").innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
+
+    function mostrarResultados(animes) {
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Sinopsis</th>
+              <th>Episodios</th>
+              <th>Puntuación</th>
+              <th>Imagen</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      animes.forEach(anime => {
+        html += `
+          <tr>
+            <td>${anime.title}</td>
+            <td>${anime.synopsis || "Sin sinopsis disponible"}</td>
+            <td>${anime.episodes || "Desconocido"}</td>
+            <td>${anime.score || "N/A"}</td>
+            <td><img src="${anime.images.jpg.image_url}" alt="${anime.title}"></td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
