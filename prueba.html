@@ -5,180 +5,241 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscar Animes</title>
   <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --background-color: rgb(28,45,66);
+      --card-background: rgba(24,26,27);
+      --text-color: #fff;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
     }
-    table {
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background-color: rgb(18,18,18);
+      color: white;
+      max-width: 600px;
+    }
+
+    .search-button {
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem 0;
+    }
+
+    .anime-card {
+      background-color: var(--card-background);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .anime-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .anime-card img {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+      height: 300px;
+      object-fit: cover;
     }
-    table, th, td {
-      border: 1px solid black;
+
+    .anime-info {
+      padding: 1rem;
     }
-    th, td {
-      padding: 10px;
-      text-align: left;
+
+    .anime-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: rgb(163, 159, 154);
     }
-    img {
-      max-width: 100px;
-      height: auto;
+
+    .anime-synopsis {
+      font-size: 0.9rem;
+      color: rgba(168,160,149);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-    .anime-list {
-      margin-top: 20px;
+
+    .anime-stats {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(168,160,149);
+      margin-top: 1rem;
+    }
+
+    .anime-score {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      
+      .container {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Buscar Animes</h1>
-  <input type="text" id="animeName" placeholder="Escribe el nombre del anime">
-  <button onclick="buscarAnimes()">Buscar</button>
-  <button onclick="borrarBusqueda()">Borrar búsqueda</button>
-  
-  <div id="preloadedList" class="anime-list">
-    <h2>Animes precargados</h2>
-    <div id="preloadedResults"></div>
+  <div class="container">
+    <h1>Buscar Animes</h1>
+    <div class="search-container">
+      <input type="text" id="animeName" class="search-input" placeholder="Escribe el nombre del anime">
+      <button onclick="buscarAnimes()" class="search-button">Buscar</button>
+      <button onclick="borrarBusqueda()" class="search-button">Borrar búsqueda</button>
+    </div>
+
+    <div id="preloadedList" class="anime-list">
+      <h2>Animes populares</h2>
+      <div id="preloadedResults" class="gallery"></div>
+    </div>
+
+    <div id="result" class="gallery"></div>
   </div>
 
-  <div id="result"></div>
-
   <script>
-    // Lista de animes precargados
-    const preloadedAnimes = ["Naruto", "One Piece", "Attack on Titan", "Demon Slayer", "My Hero Academia"];
+    const preloadedAnimes = ["Naruto", "One Piece", "Attack on Titan", "Demon Slayer", "My Hero Academia", "Nanatsu no Taizai", "Dragon Ball", "Kaijuu 8-gou", "Dragon Ball Daima"];
 
-    // Función para cargar la información de los animes precargados
-    async function cargarAnimesPrecargados() {
-      const preloadedResults = document.getElementById("preloadedResults");
-      preloadedResults.innerHTML = "<p>Cargando animes precargados...</p>";
-
-      let html = `
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Sinopsis</th>
-              <th>Episodios</th>
-              <th>Puntuación</th>
-              <th>Imagen</th>
-            </tr>
-          </thead>
-          <tbody>
+    function createAnimeCard(anime) {
+      return `
+        <div class="anime-card">
+          <img src="${anime.images.jpg.image_url}" alt="${anime.title}">
+          <div class="anime-info">
+            <h2 class="anime-title">${anime.title}</h2>
+            <p class="anime-synopsis">${anime.synopsis || "Sin sinopsis disponible"}</p>
+            <div class="anime-stats">
+              <span>Episodios: ${anime.episodes || "?"}</span>
+              <span class="anime-score">★ ${anime.score || "N/A"}</span>
+            </div>
+          </div>
+        </div>
       `;
-
-      for (const anime of preloadedAnimes) {
-        const encodedName = encodeURIComponent(anime);
-        const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
-
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`Error al cargar ${anime}: ${response.status}`);
-          }
-
-          const data = await response.json();
-          if (data.data.length > 0) {
-            const animeData = data.data[0]; // Tomamos el primer resultado
-            html += `
-              <tr>
-                <td>${animeData.title}</td>
-                <td>${animeData.synopsis || "Sin sinopsis disponible"}</td>
-                <td>${animeData.episodes || "Desconocido"}</td>
-                <td>${animeData.score || "N/A"}</td>
-                <td><img src="${animeData.images.jpg.image_url}" alt="${animeData.title}"></td>
-              </tr>
-            `;
-          }
-        } catch (error) {
-          console.error(`Error al cargar el anime ${anime}:`, error);
-        }
-      }
-
-      html += `
-          </tbody>
-        </table>
-      `;
-
-      preloadedResults.innerHTML = html;
     }
 
-    // Función para buscar animes
+    async function cargarAnimesPrecargados() {
+  const preloadedResults = document.getElementById("preloadedResults");
+
+  let html = '';
+  let loadedCount = 0;
+
+  for (const anime of preloadedAnimes) {
+    const encodedName = encodeURIComponent(anime);
+    const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 750));
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+      const data = await response.json();
+      if (data.data && data.data.length > 0) {
+        html += createAnimeCard(data.data[0]);
+        loadedCount++;
+        preloadedResults.innerHTML = html;
+      }
+      
+      // Actualizar el progreso
+    } catch (error) {
+      console.error(`Error al cargar ${anime}:`, error);
+    }
+  }
+
+  if (!html) {
+    preloadedResults.innerHTML = "<p>No se pudieron cargar los animes.</p>";
+  }
+}
+
     async function buscarAnimes() {
       const animeName = document.getElementById("animeName").value;
       const encodedName = encodeURIComponent(animeName);
       const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
 
-      // Ocultar la lista precargada al realizar una búsqueda
       document.getElementById("preloadedList").style.display = "none";
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<p>Buscando...</p>";
 
       try {
         const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Error al realizar la solicitud: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
 
         const data = await response.json();
-
         if (data.data.length > 0) {
-          mostrarResultados(data.data);
+          resultDiv.innerHTML = data.data.map(createAnimeCard).join('');
         } else {
-          document.getElementById("result").innerHTML = "<p>No se encontraron resultados para el anime buscado.</p>";
+          resultDiv.innerHTML = "<p>No se encontraron resultados.</p>";
         }
       } catch (error) {
-        document.getElementById("result").innerHTML = `<p>Error: ${error.message}</p>`;
+        resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
     }
 
-    // Función para mostrar los resultados de búsqueda
-    function mostrarResultados(animes) {
-      let html = `
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Sinopsis</th>
-              <th>Episodios</th>
-              <th>Puntuación</th>
-              <th>Imagen</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      animes.forEach(anime => {
-        html += `
-          <tr>
-            <td>${anime.title}</td>
-            <td>${anime.synopsis || "Sin sinopsis disponible"}</td>
-            <td>${anime.episodes || "Desconocido"}</td>
-            <td>${anime.score || "N/A"}</td>
-            <td><img src="${anime.images.jpg.image_url}" alt="${anime.title}"></td>
-          </tr>
-        `;
-      });
-
-      html += `
-          </tbody>
-        </table>
-      `;
-
-      document.getElementById("result").innerHTML = html;
-    }
-
-    // Función para borrar la búsqueda
     function borrarBusqueda() {
-      // Limpiar el campo de búsqueda
       document.getElementById("animeName").value = "";
-
-      // Limpiar los resultados de búsqueda
       document.getElementById("result").innerHTML = "";
-
-      // Mostrar la lista precargada nuevamente
       document.getElementById("preloadedList").style.display = "block";
     }
 
-    // Cargar los animes precargados al cargar la página
     cargarAnimesPrecargados();
+    
+            // Actualizar el contador de animes precargados
+            document.getElementById("preloaded-count").textContent = preloadedAnimes.length;
+
+// Mostrar/ocultar menú lateral
+const sidebar = document.getElementById("sidebar");
+const sidebarToggle = document.getElementById("sidebar-toggle");
+
+sidebarToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+});
+
   </script>
 </body>
 </html>
