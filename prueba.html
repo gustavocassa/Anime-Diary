@@ -25,12 +25,31 @@
       max-width: 100px;
       height: auto;
     }
+    .anime-list {
+      margin-top: 20px;
+    }
+    .anime-list-item {
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Buscar Animes</h1>
   <input type="text" id="animeName" placeholder="Escribe el nombre del anime">
   <button onclick="buscarAnimes()">Buscar</button>
+  <button onclick="borrarBusqueda()">Borrar búsqueda</button>
+  
+  <div id="preloadedList" class="anime-list">
+    <h2>Animes precargados</h2>
+    <ul>
+      <li class="anime-list-item">Naruto</li>
+      <li class="anime-list-item">One Piece</li>
+      <li class="anime-list-item">Attack on Titan</li>
+      <li class="anime-list-item">Demon Slayer</li>
+      <li class="anime-list-item">My Hero Academia</li>
+    </ul>
+  </div>
+
   <div id="result"></div>
 
   <script>
@@ -38,6 +57,9 @@
       const animeName = document.getElementById("animeName").value;
       const encodedName = encodeURIComponent(animeName);
       const url = `https://api.jikan.moe/v4/anime?q=${encodedName}`;
+
+      // Ocultar la lista precargada al realizar una búsqueda
+      document.getElementById("preloadedList").style.display = "none";
 
       try {
         const response = await fetch(url);
@@ -90,6 +112,17 @@
       `;
 
       document.getElementById("result").innerHTML = html;
+    }
+
+    function borrarBusqueda() {
+      // Limpiar el campo de búsqueda
+      document.getElementById("animeName").value = "";
+
+      // Limpiar los resultados de búsqueda
+      document.getElementById("result").innerHTML = "";
+
+      // Mostrar la lista precargada nuevamente
+      document.getElementById("preloadedList").style.display = "block";
     }
   </script>
 </body>
