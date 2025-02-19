@@ -157,11 +157,13 @@
             <div class="anime-stats">
               <span>Episodios: ${anime.episodes || "?"}</span>
               <span class="anime-score">★ ${anime.score || "N/A"}</span>
-              <span class="anime-category" style="color: rgba(168,160,149);">${anime.data.genres.name || "Sin Género"}</span>
+              <span class="anime-category" style="color: rgba(168,160,149);">  ${anime.genres ? anime.genres.map(genre => genre.name).join(', ') : "Sin Género"}</span>
             </div>
           </div>
         </div>
       `;
+
+
     }
 
     async function cargarAnimesPrecargados() {
