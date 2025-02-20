@@ -112,8 +112,6 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             grid-template-columns: repeat(4, 1fr);
             grid-template-columns: repeat(5, minmax(150px, 1fr));
-
-
             gap: 1.5rem;
             padding: 1rem 0;
         }
@@ -339,27 +337,10 @@ select.filter-button:hover {
         margin-bottom:-40px;
         width:325px;
     }
-  
-    .container {
-                padding: 1rem;
-            }
 
-            .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
 
-            body.sidebar-active {
-                margin-left: 0;
-            }
 
-            .sidebar {
-                width: 100%;
-                left: -100%;
-            }
-            .sidebar show-sidebar{
-                height: 100%;
-                 }
-}
+
 
     </style>
 </head>
@@ -461,54 +442,74 @@ select.filter-button:hover {
             </button>
         </div>
 
-        <!-- Agregar el formulario aquí: -->
-        <div class="add-content-form" id="addContentForm" style="max-width:300px; display: none; margin-bottom: 20px; background-color: rgba(24,26,27); padding: 20px; border-radius: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="color: white; margin: 0;">Agregar Nuevo Contenido</h3>
-                    <button id="hideFormButton" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Formulario de agregar contenido -->
+            <div class="add-content-form" id="addContentForm" style="display: none; background-color: rgba(24,26,27); padding: 20px; border-radius: 10px; width: 100%; max-width: 1200px; margin: 0 auto;">
+                <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                    <h3 style="color: white; margin: 0; font-size: 24px; text-align: center;">Agregar Nuevo Contenido</h3>
                 </div>
-                <form id="contentForm" style="display: grid; gap: 10px;">
-                    <input type="text" id="newTitle" placeholder="Título" required 
-                           style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    
-                    <input type="text" id="newCategory" placeholder="Categoría (separar por comas)" required
-                           style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    
-                    <input type="text" id="newScore" placeholder="Puntuación (ej: 8/10)" required
-                           style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    
-                    <input type="text" id="newImage" placeholder="URL de la imagen" required
-                           style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    
-                    <input type="text" id="newEpisode" placeholder="Episodios (ej: 12/12)" required
-                           style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    
-                    <select id="newStatus" required
-                            style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    <option value="">Seleccionar Estado</option>
-                    <option value="Completados">Completados</option>
-                    <option value="Viendo">Viendo</option>
-                    <option value="Abandonados">Abandonados</option>
-                    <option value="En espera">En espera</option>
-                </select>
-                
-                <select id="newType" required
-                        style="padding: 8px; border-radius: 5px; background-color: rgb(18,18,18); color: white;">
-                    <option value="">Seleccionar Tipo</option>
-                    <option value="anime">Anime</option>
-                    <option value="series">Serie</option>
-                    <option value="movie">Película</option>
-                    <option value="Hentai">Hentai</option>
-                </select>
-                
-                <button type="submit" 
-                        style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Agregar Contenido
-                </button>
-            </form>
-        </div>
 
-        <div class="gallery" id="animeGallery"></div>
+                <div id="ANIMECONTENEDOR" class="anim-container">
+                    <div class="form-container">
+                        <div class="modal-header">
+                        </div>
+                        <div class="search-container" style="width: 50%; margin: 0 auto;">
+                            <input type="text" 
+                                   class="search-input" 
+                                   id="searchInput" 
+                                   placeholder="Buscar anime..."
+                                   oninput="debounceSearch(event)" 
+                                   style="color:black; width: 100%;">
+                        </div>
+                        <form id="animeForm" onsubmit="handleSubmit(event)" style="display: grid; gap: 15px; max-width: 1000px; margin: 30px auto 0;">
+                            <div style="display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; width: 100%;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="title" placeholder="Título" required style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="category" placeholder="Categoría" required style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="score" placeholder="Puntuación" min="0" max="10" step="0.1" style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="url" class="form-control" id="imageUrl" placeholder="URL imagen" style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="episodes" placeholder="Episodios" style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="status" required style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                        <option value="" disabled selected>Seleccionar Estado</option>
+                                    <option value="Todos los Animes">Todos los Animes</option>
+                                    <option value="Viendo">Viendo</option>
+                                    <option value="Completados">Completado</option>
+                                    <option value="En espera">En Espera</option>
+                                    <option value="Abandonados">Abandonados</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="type" required style="width: 100%; height: 35px; padding: 5px 10px; border-radius: 5px; background-color: #0e0f0f; color: white;">
+                                        <option value="" disabled selected>Tipo</option>
+                                        <option value="tv">TV</option>
+                                        <option value="movie">Película</option>
+                                        <option value="ova">OVA</option>
+                                        <option value="special">Especial</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="filter-button" style="width: 200px; margin: 15px auto 0; display: block; background-color: #007bff; transition: background-color 0.3s;">Agregar Contenido</button>
+                        </form>
+                    </div>
+                    <div class="results-container" id="searchResults">
+                        <!-- Los resultados de la búsqueda se mostrarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Galería de anime -->
+            <div class="gallery" id="animeGallery"></div>
+        </div>
     </div>
     <div id="modal" class="modal">
         <span class="cerrar">&times;</span>
@@ -1915,7 +1916,39 @@ select.filter-button:hover {
         "image": "https://images.alphacoders.com/136/1369627.jpeg",
         "episode": "12/12",
         "status": "Completados"
-        }
+        },
+        {
+    "title": "Kono Subarashii Sekai ni Shukufuku wo!",
+    "category": "Adventure, Comedy, Fantasy",
+    "score": "8.1",
+    "image": "https://cdn.myanimelist.net/images/anime/1895/142748.jpg",
+    "episode": "10/10",
+    "status": "Completado"
+},
+{
+    "title": "Sakamoto Days",
+    "category": "Action, Comedy",
+    "score": "7.8",
+    "image": "https://gqcanimes.com.br/wp-content/uploads/2024/05/trailer-anime-de-Sakamoto-Days-em-2025-1250x703.webp",
+    "episode": "11/11",
+    "status": "Enespera"
+},
+{
+    "title": "Akuyaku Reijou Tensei Ojisan",
+    "category": "Comedy, Fantasy",
+    "score": "7.00",
+    "image": "https://www.acidadeon.com/tudoep/wp-content/uploads/sites/10/2025/01/Copia-de-Foto-26_2025-01-31_19-15-12_png_2025-01-31_19-15-12-1280x700.webp",
+    "episode": "12/12",
+    "status": "Viendo"
+},
+{
+    "title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka",
+    "category": "Action, Adventure, Fantasy",
+    "score": "7.50",
+    "image": "https://geek.etc.br/wp-content/uploads/2024/03/imagem_2024-03-11_123227148.png",
+    "episode": "13/13",
+    "status": "En espera"
+}
     ];   
     
     // Modificar el array mediaItems para incluir los tres tipos
@@ -2693,7 +2726,177 @@ select.filter-button:hover {
         document.getElementById('addContentForm').addEventListener('submit', handleNewContent);
     }
     
+            // Función de debounce para evitar muchas llamadas a la API
+        let timeoutId;
+        function debounceSearch(event) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                searchAnime(event.target.value);
+            }, 500);
+        }
+
+// Función para buscar anime
+async function searchAnime(query) {
+    if (!query) {
+        document.getElementById('searchResults').innerHTML = '';
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        displayResults(data.data);
+    } catch (error) {
+        console.error('Error al buscar:', error);
+    }
+}
+
+// Función para mostrar resultados
+function displayResults(animes) {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = animes.map(anime => `
+        <div class="anime-card" onclick="fillForm(${JSON.stringify(anime).replace(/"/g, '&quot;')})">
+            <img src="${anime.images.jpg.image_url}" alt="${anime.title}" loading="lazy">
+            <div class="anime-info">
+                <h3 class="anime-title">${anime.title}</h3>
+                <div class="anime-details">
+                    <div>Tipo: ${anime.type || 'N/A'}</div>
+                    <div>Episodios: ${anime.episodes || 'N/A'}</div>
+                    <div>Puntuación: ${anime.score || 'N/A'}</div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Agregar estilos dinámicamente si no existen
+    if (!document.getElementById('results-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'results-styles';
+        styles.textContent = `
+            .results-container {
+                margin-top: 20px;
+                max-height: 400px;
+                overflow-y: auto;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+                padding: 10px;
+            }
+
+            .results-container .anime-card {
+                background-color: rgba(24,26,27);
+                border-radius: 8px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+
+            .results-container .anime-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.3);
+            }
+
+            .results-container .anime-card img {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .results-container .anime-info {
+                padding: 10px;
+            }
+
+            .results-container .anime-title {
+                font-size: 0.9rem;
+                color: white;
+                margin-bottom: 5px;
+            }
+
+            .results-container .anime-details {
+                font-size: 0.8rem;
+                color: #888;
+            }
+
+            .results-container::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .results-container::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 4px;
+            }
+
+            .results-container::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: 4px;
+            }
+
+            .results-container::-webkit-scrollbar-thumb:hover {
+                background: var(--primary-hover);
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+}
     
+    
+    // Función para llenar el formulario al hacer clic en una tarjeta
+        function fillForm(anime) {
+            document.getElementById('title').value = anime.title;
+            document.getElementById('category').value = anime.genres?.map(g => g.name).join(', ') || '';
+            document.getElementById('score').value = anime.score || '';
+            document.getElementById('imageUrl').value = anime.images.jpg.image_url;
+            document.getElementById('episodes').value = anime.episodes ? `${anime.episodes}/${anime.episodes}` : '';
+            
+            // Mapear el tipo de anime
+            const typeMap = {
+                'TV': 'tv',
+                'Movie': 'movie',
+                'OVA': 'ova',
+                'Special': 'special'
+            };
+            if (anime.type && typeMap[anime.type]) {
+                document.getElementById('type').value = typeMap[anime.type];
+            }
+        }
+
+
+
+
+
+    
+       function handleSubmit(event) {
+        event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+
+        // Obtiene los valores de los campos del formulario
+        const title = document.getElementById('title').value;
+        const category = document.getElementById('category').value;
+        const score = document.getElementById('score').value;
+        const imageUrl = document.getElementById('imageUrl').value;
+        const episodes = document.getElementById('episodes').value;
+        const status = document.getElementById('status').value;
+
+        // Crea un objeto con toda la información en formato JSON
+        const content = {
+            "title": title,
+            "category": category,
+            "score": score,
+            "image": imageUrl,
+            "episode": episodes,
+            "status": status
+        };
+
+        // Convierte el objeto a una cadena JSON
+        const jsonContent = JSON.stringify(content, null, 4); // Formato legible
+
+        // Copia el contenido JSON al portapapeles
+        navigator.clipboard.writeText(jsonContent).then(() => {
+            alert('Contenido copiado al portapapeles!');
+        }).catch(err => {
+            console.error('Error al copiar el contenido: ', err);
+        });
+    }
+
         </script>
 </body>
 </html>
